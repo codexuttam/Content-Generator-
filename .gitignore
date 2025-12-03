@@ -44,4 +44,5 @@ Thumbs.db
 .angular
 
 # Local environment files containing secrets
-src/app/environments/environment.local.ts
+src/app/environments/environment.local.tsserver/node_modules/
+node_modules/
