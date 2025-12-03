@@ -1,15 +1,21 @@
-  <div class="app-container">
-      <app-header></app-header>
-      <main class="main-content">
-        <app-content-form
-          (outputChange)="onOutputChange($event)"
-          (generatingChange)="onGeneratingChange($event)">
-        </app-content-form>
-        <app-output-display
-          [output]="output"
-          [isGenerating]="isGenerating">
-        </app-output-display>
-      </main>
-      <app-footer></app-footer>
-    </div>
-  `,
+<div class="app-container">
+  <div class="app-background-blob" aria-hidden="true"></div>
+  <!-- SVG wave overlay used for theme transition animations -->
+  <svg class="theme-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" x2="1">
+        <stop offset="0%" stop-color="rgba(124,58,237,0.12)" />
+        <stop offset="100%" stop-color="rgba(14,165,233,0.08)" />
+      </linearGradient>
+    </defs>
+    <path d="M0,40 C240,120 480,0 720,40 C960,80 1200,20 1440,40 L1440 120 L0 120 Z" fill="url(#g1)" />
+  </svg>
+  <app-header></app-header>
+  <main class="main-content">
+    <app-content-form (outputChange)="onOutputChange($event)" (generatingChange)="onGeneratingChange($event)">
+    </app-content-form>
+    <app-output-display [output]="output" [isGenerating]="isGenerating">
+    </app-output-display>
+  </main>
+  <app-footer></app-footer>
+</div>

@@ -1,55 +1,30 @@
-<div class="form-container">
+<div class="form-container" #card (mousemove)="onCardMove($event)" (mouseleave)="onCardLeave()">
   <h2 class="form-title">Generate Content</h2>
   <form (ngSubmit)="onSubmit($event)" class="form">
     <div class="form-group">
       <label for="topic" class="form-label">Topic</label>
-      <textarea
-        id="topic"
-        [ngModel]="topic()"
-        (ngModelChange)="topic.set($event)"
-        name="topic"
+      <textarea id="topic" [ngModel]="topic()" (ngModelChange)="topic.set($event)" name="topic"
         placeholder="Enter your main topic (e.g., sustainable fashion, productivity tips, cloud computing)"
-        class="form-textarea"
-        rows="3"
-        required
-      ></textarea>
+        class="form-textarea" rows="3" required></textarea>
     </div>
 
     <div class="form-group">
       <label for="keywords" class="form-label">Keywords</label>
-      <input
-        type="text"
-        id="keywords"
-        [ngModel]="keywords()"
-        (ngModelChange)="keywords.set($event)"
-        name="keywords"
-        placeholder="Enter relevant keywords separated by commas"
-        class="form-input"
-      />
+      <input type="text" id="keywords" [ngModel]="keywords()" (ngModelChange)="keywords.set($event)" name="keywords"
+        placeholder="Enter relevant keywords separated by commas" class="form-input" />
     </div>
 
     <div class="form-group">
       <label class="form-label">Content Type</label>
       <div class="radio-grid">
         @for (type of contentTypes; track type.id) {
-          <div class="radio-item">
-            <input
-              type="radio"
-              [id]="type.id"
-              name="contentType"
-              [value]="type.id"
-              [ngModel]="selectedContentType()"
-              (ngModelChange)="selectedContentType.set($event)"
-              class="radio-input"
-            />
-            <label
-              [for]="type.id"
-              class="radio-label"
-              [class.selected]="selectedContentType() === type.id"
-            >
-              <span>{{ type.label }}</span>
-            </label>
-          </div>
+        <div class="radio-item">
+          <input type="radio" [id]="type.id" name="contentType" [value]="type.id" [ngModel]="selectedContentType()"
+            (ngModelChange)="selectedContentType.set($event)" class="radio-input" />
+          <label [for]="type.id" class="radio-label" [class.selected]="selectedContentType() === type.id">
+            <span>{{ type.label }}</span>
+          </label>
+        </div>
         }
       </div>
     </div>
@@ -58,24 +33,13 @@
       <label class="form-label">Tone</label>
       <div class="radio-grid">
         @for (tone of toneTypes; track tone.id) {
-          <div class="radio-item">
-            <input
-              type="radio"
-              [id]="tone.id"
-              name="tone"
-              [value]="tone.id"
-              [ngModel]="selectedTone()"
-              (ngModelChange)="selectedTone.set($event)"
-              class="radio-input"
-            />
-            <label
-              [for]="tone.id"
-              class="radio-label"
-              [class.selected]="selectedTone() === tone.id"
-            >
-              <span>{{ tone.label }}</span>
-            </label>
-          </div>
+        <div class="radio-item">
+          <input type="radio" [id]="tone.id" name="tone" [value]="tone.id" [ngModel]="selectedTone()"
+            (ngModelChange)="selectedTone.set($event)" class="radio-input" />
+          <label [for]="tone.id" class="radio-label" [class.selected]="selectedTone() === tone.id">
+            <span>{{ tone.label }}</span>
+          </label>
+        </div>
         }
       </div>
     </div>
@@ -83,7 +47,7 @@
     <button type="submit" class="submit-button" [disabled]="isGenerating()">
       <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"/>
+          d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
       </svg>
       {{ isGenerating() ? 'Generating...' : 'Generate Content' }}
     </button>

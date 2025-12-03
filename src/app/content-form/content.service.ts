@@ -20,7 +20,18 @@ interface ContentResponse {
   providedIn: 'root',
 })
 export class ContentService {
-  private ai = new GoogleGenAI({ apiKey: environment.GEMINI_API_KEY });
+  // Initialize the Google GenAI client only when an API key is provided.
+  // If no key is present we run in "mock mode" so the app can function
+  // for UI/development without contacting the real API or requiring billing.
+  private ai?: GoogleGenAI;
+
+  constructor() {
+    if (environment.GEMINI_API_KEY) {
+      this.ai = new GoogleGenAI({ apiKey: environment.GEMINI_API_KEY });
+    } else {
+      console.warn('GEMINI_API_KEY not set — ContentService running in mock mode.');
+    }
+  }
 
   generateContent(payload: ContentRequest): Observable<ContentResponse> {
     return from(this.generateContentAsync(payload));
@@ -53,6 +64,16 @@ export class ContentService {
 
     console.log('Using prompt:', prompt);
 
+    // If the GenAI client wasn't initialized (no API key), return a mock
+    // response so the UI can be developed and tested without billing.
+    if (!this.ai) {
+      const mockContent = this.buildMockContent({ topic, contentType, tone, keywords });
+      return {
+        generatedContent: mockContent,
+        promptUsed: prompt,
+      };
+    }
+
     const response = await this.ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
@@ -67,5 +88,34 @@ export class ContentService {
       generatedContent,
       promptUsed: prompt,
     };
+  }
+
+  // Helper used only for mock/dev mode to generate a plausible piece of text
+  // without calling the external API.
+  private buildMockContent(input: ContentRequest): string {
+    const { topic, contentType, tone = 'casual', keywords } = input;
+    let base = '';
+    switch (contentType) {
+      case 'blog_post':
+        base = `Mock blog post about "${topic}". This is an example introduction followed by a body and a conclusion. Tone: ${tone}.`;
+        break;
+      case 'social_media_update':
+        base = `Mock social update: ${topic} — concise and engaging. Tone: ${tone}.`;
+        break;
+      case 'email_draft':
+        base = `Subject: Mock email about ${topic}\n\nHello,\n\nThis is a mock email body written in a ${tone} tone.\n\nRegards,\nTeam`;
+        break;
+      case 'product_description':
+        base = `Mock product description for ${topic}. Highlights: features and benefits in a ${tone} tone.`;
+        break;
+      default:
+        base = `Mock content for ${topic} (type: ${contentType}). Tone: ${tone}.`;
+    }
+
+    if (keywords) {
+      base += `\n\nKeywords: ${keywords}`;
+    }
+
+    return base;
   }
 }

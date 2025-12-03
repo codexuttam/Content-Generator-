@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, output, signal, ViewChild, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContentService } from './content.service';
 
@@ -46,6 +46,9 @@ export class ContentFormComponent {
     { id: 'formal', label: 'Formal' },
   ];
 
+  @ViewChild('card', { static: true }) cardRef!: ElementRef<HTMLDivElement>;
+  private renderer = inject(Renderer2);
+
   onSubmit(event: Event) {
     event.preventDefault();
     if (!this.topic().trim()) return;
@@ -74,5 +77,29 @@ export class ContentFormComponent {
         this.generatingChange.emit(false);
       },
     });
+  }
+
+  onCardMove(event: MouseEvent) {
+    const el = this.cardRef?.nativeElement;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dx = (x - cx) / cx; // -1 .. 1
+    const dy = (y - cy) / cy; // -1 .. 1
+    const tiltX = (dy * 6).toFixed(2);
+    const tiltY = (dx * -6).toFixed(2);
+    const transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
+    this.renderer.setStyle(el, 'transform', transform);
+    this.renderer.setStyle(el, 'transition', 'transform 120ms cubic-bezier(.22,.9,.32,1)');
+  }
+
+  onCardLeave() {
+    const el = this.cardRef?.nativeElement;
+    if (!el) return;
+    this.renderer.setStyle(el, 'transform', 'none');
+    this.renderer.setStyle(el, 'transition', 'transform 450ms cubic-bezier(.22,.9,.32,1)');
   }
 }

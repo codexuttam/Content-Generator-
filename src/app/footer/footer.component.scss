@@ -1,6 +1,6 @@
 .footer {
-  background-color: white;
-  border-top: 1px solid #e5e7eb;
+  background-color: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
   padding: 1rem 0;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .footer-text {
-  color: #6b7280;
+  color: var(--muted);
   font-size: 0.875rem;
   margin: 0;
 }

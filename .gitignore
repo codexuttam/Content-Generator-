@@ -42,3 +42,6 @@ testem.log
 Thumbs.db
 .vscode
 .angular
+
+# Local environment files containing secrets
+src/app/environments/environment.local.ts

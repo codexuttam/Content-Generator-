@@ -1,6 +1,6 @@
 .header {
-  background-color: white;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  background-color: var(--bg);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
 }
 
 .header-container {
@@ -12,25 +12,67 @@
 .header-content {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .header-icon {
   height: 1.5rem;
   width: 1.5rem;
-  color: #4f46e5;
+  color: var(--accent);
   margin-right: 0.5rem;
 }
 
 .header-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text);
   margin: 0;
 }
 
 .header-subtitle {
-  color: #6b7280;
+  color: var(--muted);
   font-size: 0.875rem;
   margin: 0.25rem 0 0 0;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  margin-left: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(79, 70, 229, 0.06);
+  transform: translateY(-1px);
+}
+
+.moon-icon {
+  display: block;
+  color: currentColor;
+}
+
+.theme-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--muted);
+  transition: transform 420ms cubic-bezier(.22, .9, .32, 1), color 320ms ease, opacity 280ms ease;
+}
+
+.theme-icon.swap {
+  transform: rotate(360deg) scale(1.05);
+  color: var(--accent);
+}
+
+.theme-toggle[aria-pressed="true"] .theme-icon.sun {
+  color: var(--accent);
 }

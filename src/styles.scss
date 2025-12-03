@@ -15,6 +15,105 @@ body {
   font-optical-sizing: auto;
 }
 
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --accent: #4f46e5;
+}
+
+/* Dark theme variables */
+.dark-theme {
+  --bg: #0b1220;
+  --card: #0f1724;
+  --text: #e6eef8;
+  --muted: #9ca3af;
+  --accent: #7c3aed;
+}
+
+/* Base page styles using variables */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 600ms ease, color 600ms ease;
+}
+
+/* flowing water overlay animation */
+/* SVG wave overlay: we'll animate an SVG wave element placed in the app shell.
+   When the body has .theme-water we animate the wave across the screen. */
+.theme-wave {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translateX(-110%);
+  opacity: 0.95;
+  transition: opacity 360ms ease;
+}
+
+body.theme-water .theme-wave {
+  transform: translateX(0%);
+  animation: wave-slide 900ms cubic-bezier(.22, .9, .32, 1) forwards;
+}
+
+@keyframes wave-slide {
+  0% {
+    transform: translateX(-110%) translateY(0);
+    opacity: 0.9;
+  }
+
+  60% {
+    transform: translateX(10%) translateY(-6px) scaleY(1.02);
+  }
+
+  100% {
+    transform: translateX(110%) translateY(0);
+    opacity: 0;
+  }
+}
+
+/* Dark-theme global overrides for components that still use hard-coded colors */
+.dark-theme .header,
+.dark-theme .footer,
+.dark-theme .content-form,
+.dark-theme .output-display,
+.dark-theme .app-container,
+.dark-theme .card,
+.dark-theme .header-container,
+.dark-theme .header-content,
+.dark-theme .generated-content,
+.dark-theme .form-card {
+  background-color: var(--card) !important;
+  color: var(--text) !important;
+}
+
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select,
+.dark-theme .btn,
+.dark-theme button {
+  background-color: var(--card) !important;
+  color: var(--text) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.dark-theme .header-subtitle,
+.dark-theme .muted,
+.dark-theme .small {
+  color: var(--muted) !important;
+}
+
+/* Ensure card-like panels that used light greys get darker backgrounds */
+.dark-theme .panel,
+.dark-theme .panel-alt {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+
 h1,
 h2,
 h3,
@@ -34,4 +133,85 @@ button,
 select {
   margin: 0;
   padding: 0;
+}
+
+/* Animated background blobs */
+.app-background-blob {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(600px 400px at 10% 20%, rgba(124, 58, 237, 0.08), transparent 10%),
+    radial-gradient(500px 300px at 80% 80%, rgba(14, 165, 233, 0.06), transparent 10%);
+  mix-blend-mode: screen;
+  filter: blur(40px) saturate(120%);
+  transition: opacity 600ms ease;
+  animation: blob-move 12s ease-in-out infinite alternate;
+}
+
+.dark-theme .app-background-blob {
+  background: radial-gradient(600px 400px at 10% 20%, rgba(124, 58, 237, 0.14), transparent 10%),
+    radial-gradient(500px 300px at 80% 80%, rgba(14, 165, 233, 0.08), transparent 10%);
+}
+
+@keyframes blob-move {
+  0% {
+    transform: translate3d(-30px, -10px, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(20px, 10px, 0) scale(1.05);
+  }
+
+  100% {
+    transform: translate3d(-10px, -20px, 0) scale(1);
+  }
+}
+
+/* Button overlay and subtle gradient */
+.submit-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Entrance and hover effects for cards */
+.form-container,
+.output-container {
+  position: relative;
+  opacity: 0;
+  transform: translateY(12px) scale(0.995);
+  animation: card-entrance 700ms cubic-bezier(.22, .9, .32, 1) forwards;
+}
+
+@keyframes card-entrance {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.form-container::before,
+.output-container::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: 0 20px 60px rgba(79, 70, 229, 0.06);
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.form-container:hover::before,
+.output-container:hover::before {
+  opacity: 1;
 }
